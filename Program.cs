@@ -17,7 +17,7 @@
  * - targetElement: Specifies the XML element whose value needs to be extracted.
  * - parentElement (Optional): Limits the search for the targetElement to only those elements 
  *                            that are children of the specified parentElement.
- * - immediateParent (Optional): If set, narrows down the search to immediate children of the 
+ * - immediateParent (Optional): Either left out or "a". If set, narrows down the search to immediate children of the 
  *                              specified parentElement.
  * 
  * Element Formatting:
