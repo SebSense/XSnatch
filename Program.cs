@@ -17,7 +17,7 @@ namespace XSnatch
          *  immediateParent |   a               |    if included, makes the program only search through the immediate child-elements of the parent. Leave it out for default - searching through all child-elements at any depth.
          *
          *  element formatting:
-         *      <elem attr=val>
+         *      elem-attr=val-attr=val
          *  where elem is the element you are looking for and attr is an optional attribute with value val
          *                      
          *                      Example         |       Match           
@@ -101,12 +101,12 @@ namespace XSnatch
                         inputFile = args[0];
                         break;
                     case 0:
+                        //If loaded with no args, enter data for the default case:
                         inputFile = "sma_gentext.xml";
-                        outputFile = "output.txt";
                         xpath = "//*[@id='42007']//target";
                         break;
                     default:
-                        throw new ArgumentException("Error: Incorrect number of args. Syntax is: 'XSnatch inputFile targetElement parentElement(optional) absoluteParent(optional)'. See reame.md for more help");
+                        throw new ArgumentException("incorrect number of args. Syntax is: 'XSnatch inputFile targetElement parentElement(optional) absoluteParent(optional)'. See reame.md for more help");
                 }
                 //Check that the file extension is xml
                 if (inputFile.Split('.').Last().ToLower() != "xml")
@@ -126,12 +126,33 @@ namespace XSnatch
                 }
                 //Write to file
                 //TODO: Add prompting for overwrite, rename or quit
+                //Write to file
                 using (StreamWriter writer = new StreamWriter(outputFile))
                 {
-                    writer.Write(result);
                     Console.WriteLine($"Found element! Value: '{result}'");
+                    //Prompt user to overwrite, rename or abort:
+                    while(File.Exists(outputFile))
+                    {
+                        Console.Write($"File {outputFile} already exists. Overwrite? (yes/no/quit) >");
+                        string command = Console.ReadLine().ToLower();
+                        if (command == "n" || command == "no")
+                        {
+                            do{
+                                Console.Write("Enter filename >");
+                                outputFile = Console.ReadLine();
+                            } while (outputFile == String.Empty);
+                        }  
+                        else if (command == "q" || command == "quit")
+                        {
+                            return 0;
+                        }
+                        else if (command == "y" || command == "yes")
+                        {
+                            break;
+                        }
+                    }
+                    writer.Write(result);
                     Console.Write($"Saved to {outputFile}");
-
                 }
                 return 0;
             }
@@ -144,6 +165,11 @@ namespace XSnatch
             {
                 Console.WriteLine("Error: " + ex.Message);
                 return 1;
+            }
+            catch (FormatException ex) //User tried to input a non .xlm filename
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return 2;
             }
             catch (ArgumentException ex) // User tried to input a non .xlm filename
             {
