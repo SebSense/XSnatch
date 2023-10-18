@@ -1,13 +1,21 @@
-﻿namespace XSnatch
+﻿using System.Xml;
+namespace XSnatch
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            /* Define vars:
-             * DECLARE inputFile, targetKey, parentKey, parentValue, outputFile AS STRINGS
-             * IF Args: INITIALIZE vars FROM Args
-             * ELSE:    INITIALIZE DEFAULT vars*/
+            // Define vars:
+            string inputFile, targetKey, parentKey, parentValue, outputFile;
+
+            //if (args.Length == 0)
+            //{
+            inputFile = "sma_gentext.xml";
+            targetKey = "target";
+            parentKey = "id";
+            parentValue = "42007";
+            outputFile = "output.txt";
+            //}
 
 
             /* Verify filetype of inputFile as XML or throw exception
@@ -19,7 +27,10 @@
              * IF inputType = "XML":
              *      
              */     //Try to load the file as XML to fileContents or throw exception
-
+            StreamReader inputStream = new StreamReader(File.Open(inputFile, FileMode.Open));
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(inputStream);
+            Console.WriteLine(xmlDoc.DocumentElement.OuterXml);
             /*Extract the value(s)
      *      FOREACH parentKey:parentValue IN inputFile: 
      *      IF targetKey: ADD targetValue to targetValues
@@ -39,7 +50,7 @@
              *      ELSE:   return
              * ELSE: write outputFile
              * return
-            
+
 
             */
 
