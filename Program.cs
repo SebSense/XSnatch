@@ -124,18 +124,36 @@ namespace XSnatch
                     //Find the element by using XPATH:
                     result = xmlDoc.SelectSingleNode(xpath).InnerText;
                 }
-                //Write to file
-                //TODO: Add prompting for overwrite, rename or quit
+
+                Console.WriteLine($"Found element! Value: '{result}'");
+                //Prompt user to save
+                while (true)
+                {
+                    Console.Write($"Save result to '{outputFile}'? (yes/rename/quit) >");
+                    string command = Console.ReadLine().ToLower();
+                    if (command == "q" || command == "quit" || command == "no" || command == "n")
+                        return 0;
+                    if (command == "r" || command == "rename")
+                    {
+                        do
+                        {
+                            Console.Write("Enter filename >");
+                            outputFile = Console.ReadLine();
+                        } while (outputFile == String.Empty);
+                        break;
+                    }
+                    if (command == "y" || command == "yes")
+                        break;
+                }
                 //Write to file
                 using (StreamWriter writer = new StreamWriter(outputFile))
                 {
-                    Console.WriteLine($"Found element! Value: '{result}'");
                     //Prompt user to overwrite, rename or abort:
-                    while(File.Exists(outputFile))
+                    while (File.Exists(outputFile))
                     {
-                        Console.Write($"File {outputFile} already exists. Overwrite? (yes/no/quit) >");
+                        Console.Write($"File {outputFile} already exists. Overwrite? (yes/rename/quit) >");
                         string command = Console.ReadLine().ToLower();
-                        if (command == "n" || command == "no")
+                        if (command == "r" || command == "rename")
                         {
                             do{
                                 Console.Write("Enter filename >");
