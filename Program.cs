@@ -1,38 +1,55 @@
-﻿using System.Xml;
+﻿/*
+ * XSnatch - XML Element Extractor
+ * 
+ * Purpose:
+ * This program, XSnatch, allows the user to extract the value of a specific element from an XML file based on 
+ * a set of provided command-line arguments. It constructs an XPath query from the arguments to 
+ * locate and fetch the desired XML elements. Once located, the program can save the value of the 
+ * extracted element to a specified output file.
+ * 
+ * Usage:
+ * XSnatch.exe [inputFilePath] [targetElement] [parentElement*] [immediateParent*]
+ * 
+ * Arguments:
+ * - inputFilePath: Relative path to an XML file. e.g., "filename.xml"
+ * - targetElement: Specifies the XML element whose value needs to be extracted.
+ * - parentElement (Optional): Limits the search for the targetElement to only those elements 
+ *                            that are children of the specified parentElement.
+ * - immediateParent (Optional): If set, narrows down the search to immediate children of the 
+ *                              specified parentElement.
+ * 
+ * Element Formatting:
+ * The format for elements with attributes is: "element-attribute=value". For instance:
+ * - "elem": Matches any element named "elem".
+ * - "*": Matches any XML element.
+ * - "*-type=34": Matches any element with an attribute named "type" having the value "34".
+ * - "entry-id": Matches an <entry> element with an "id" attribute of any value.
+ * 
+ * Example Usage:
+ * XSnatch.exe sma_gentext.xml target *-id=42007
+ * 
+ * Error Handling:
+ * - Checks for valid XML file input.
+ * - Captures exceptions for file not found, invalid format, argument errors, and other general 
+ *   exceptions.
+ * 
+ * Note:
+ * The provided program is internal and, therefore, is meant to be used only within its assembly.
+ * For further information or specific usage cases, refer to the inline comments and documentation.
+ * 
+ * Author: Sebastian Senic
+ * Date: 2023-10-18
+ */ 
+
+using System.Xml;
 namespace XSnatch
 {
     internal class Program
     {
-        /* XSnatch arguments:
-         * 
-         *          XSnatch.exe inputFilePath targetElement parentElement* immediateParent*
-         *          
-         * example: XSnatch.exe sma_gentext.xml target *-id=42007
-         * 
-         *  * = optional
-         *
-         *      Argument        Example                 Explanation
-         *  inputFilePath   |   filename.xml    |    relative path to an .xml file
-         *  targetElement   |   elem            |    the element whose value you want to extract.
-         *  parentElement   |   elem-attr=val   |    an (optional) parent element. The program will only look for the target value match in this elements child-elements
-         *  immediateParent |   a               |    if included, makes the program only search through the immediate child-elements of the parent. Leave it out for default - searching through all child-elements at any depth.
-         *
-         *  element formatting:
-         *      elem-attr=val-attr=val
-         *  where elem is the element you are looking for and attr is an optional attribute with value val
-         *                      
-         *                      Example         |       Match           
-         *                  |   elem            |   matches any "elem" element
-         *                  |   *               |   matches any element
-         *                  |   *-type=34       |   matches any element that has an attribute called type with value 34
-         *                  |   entry-id        |   matches an <entry> element that has an attribute called id with any value
-         * 
-         */
         static int Main(string[] args)
         {
             string xpath = "//"; //Stringbuilder for an XPATH address to be used for searching through the .xml file.
-            //Sets the xpath divider chars between parentElement and targetElement to releative.
-            string xpathDivider = "//";
+            string xpathDivider = "//"; //Sets the xpath divider chars between parentElement and targetElement to releative.
             string inputFile, outputFile = "output.txt";
 
             try
