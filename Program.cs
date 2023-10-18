@@ -112,29 +112,27 @@ namespace XSnatch
                         break;
                 }
                 //Write to file
-                using (StreamWriter writer = new StreamWriter(outputFile))
+                while (File.Exists(outputFile))
                 {
-                    //Prompt user to overwrite, rename or abort:
-                    while (File.Exists(outputFile))
-                    {
-                        Console.Write($"File {outputFile} already exists. Overwrite? (yes/rename/quit) >");
-                        string command = Console.ReadLine().ToLower();
-                        if (command == "r" || command == "rename")
-                        {
-                            outputFile = GetInput("Enter filename >");
-                        }  
-                        else if (command == "q" || command == "quit")
-                        {
-                            return 0;
-                        }
-                        else if (command == "y" || command == "yes")
-                        {
-                            break;
-                        }
-                    }
-                    writer.Write(result);
-                    Console.Write($"Saved to {outputFile}");
+                            Console.Write($"File {outputFile} already exists. Overwrite? (yes/rename/quit) >");
+                            string command = Console.ReadLine().ToLower();
+                            if (command == "r" || command == "rename")
+                            {
+                                outputFile = GetInput("Enter filename >");
+                            }
+                            else if (command == "q" || command == "quit")
+                            {
+                                return 0;
+                            }
+                            else if (command == "y" || command == "yes")
+                            {
+                                break;
+                            }
                 }
+                StreamWriter writer = new StreamWriter(outputFile);
+                writer.Write(result);
+                writer.Close();
+                Console.WriteLine($"Saved result '{result}' to '{outputFile}'");
                 return 0;
             }
             catch (NullReferenceException) // No match
