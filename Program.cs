@@ -6,13 +6,13 @@ namespace XSnatch
         static void Main(string[] args)
         {
             // Define vars:
-            string inputFile, targetKey, parentKey, parentValue, outputFile;
+            string inputFile, targetName, parentAttribute, parentValue, outputFile;
 
             //if (args.Length == 0)
             //{
             inputFile = "sma_gentext.xml";
-            targetKey = "target";
-            parentKey = "id";
+            targetName = "target";
+            parentAttribute = "id";
             parentValue = "42007";
             outputFile = "output.txt";
             //}
@@ -30,11 +30,11 @@ namespace XSnatch
             StreamReader inputStream = new StreamReader(File.Open(inputFile, FileMode.Open));
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(inputStream);
-            Console.WriteLine(xmlDoc.DocumentElement.OuterXml);
-            /*Extract the value(s)
-     *      FOREACH parentKey:parentValue IN inputFile: 
-     *      IF targetKey: ADD targetValue to targetValues
-     */
+
+            //Find the element by using XPATH:
+            XmlNode targetNode = xmlDoc.SelectSingleNode($"//*[@{parentAttribute}='{parentValue}']//{targetName}");
+            string result = targetNode.InnerText;
+            Console.WriteLine(result);
 
             //Placeholders for additional filetype support:
             /* ELSE IF inputType = "JSON": throw exception
@@ -53,7 +53,10 @@ namespace XSnatch
 
 
             */
-
+            using (StreamWriter writer = new StreamWriter(outputFile))
+            {
+                writer.Write(result);
+            }
 
         }
     }
