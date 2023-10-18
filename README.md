@@ -7,6 +7,10 @@ This program, **XSnatch**, allows the user to extract the value of a specific el
 ```
 XSnatch.exe [inputFilePath] [targetElement] [parentElement*] [immediateParent*]
 ```
+```
+XSnatch.exe
+```
+- When used without arguments it defaults to a given case: Finding the value of the element `target` when the attribute `id` is `42007` and saving the result as `output.txt`
 
 ## Arguments
 - **inputFilePath**: Relative path to an XML file. e.g., `filename.xml`.
