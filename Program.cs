@@ -62,8 +62,7 @@ namespace XSnatch
                         goto case 3;
                     case 3:
                         //Convert the arg to an xpath string and add it to stringbuilder
-                        xpath += ArgToXpath(args[2]);
-                        xpath += xpathDivider;
+                        xpath += ArgToXpath(args[2]) + xpathDivider;
                         goto case 2;
                     case 2:
                         //Convert the arg to an xpath string and add it to stringbuilder
@@ -117,17 +116,11 @@ namespace XSnatch
                             Console.Write($"File {outputFile} already exists. Overwrite? (yes/rename/quit) >");
                             string command = Console.ReadLine().ToLower();
                             if (command == "r" || command == "rename")
-                            {
                                 outputFile = GetInput("Enter filename >");
-                            }
                             else if (command == "q" || command == "quit")
-                            {
                                 return 0;
-                            }
                             else if (command == "y" || command == "yes")
-                            {
                                 break;
-                            }
                 }
                 StreamWriter writer = new StreamWriter(outputFile);
                 writer.Write(result);
@@ -162,38 +155,34 @@ namespace XSnatch
             }
         }
         //string ArgToXpath(string, char) - Takes a command-line argument and reformats it into a part of an XPATH element query
-        //splitChar is the char used in the input string to separate name and attributes in the element.
         private static string ArgToXpath(string arg)
         {
-            //split arg to array of [element name, attribute, attribute, attribute, ...]
+            //split arg by whitespace to array [element name, attribute=value, attribute, attribute=value, ...]
             string[] element = arg.Trim().Split();
-            string result = "";
             if (element.Length > 1)
-            //if the element had attributes:
+            //if the element has attributes:
             {
                 //start building the result string with the element name and bracket to start adding attributes
-                result += element[0] + "[";
+                string result = element[0] + "[";
                 //the rest of the strings in the array are attributes. Add them to the string builder:
                 for (int i = 1; i < element.Length; i++)
                 {
-                    string attr = "@" + element[i];
-                    string key, value;
-                    if (attr.Contains('='))
+                    string attribute = "@" + element[i];
+                    if (attribute.Contains('='))
                     //If the string has defined an attribute with a value this makes sure the value is surrounded by quotes:
                     {
-                        key = attr.Split("=")[0];
-                        value = attr.Split("=")[1];
+                        string key = attribute.Split("=")[0];
+                        string value = attribute.Split("=")[1];
                         if (value.First() != '\'' && value.First() != '"') value = "'" + value;
                         if (value.Last() != '\'' && value.Last() != '"') value = value + "'";
-                        attr = key + "=" + value;
+                        attribute = key + "=" + value;
                     }
-                    if (i > 1) attr = " and " + attr;
-                    result += attr;
+                    if (i > 1) attribute = " and " + attribute;
+                    result += attribute;
                 }
-                result += "]";
+                return result + "]";
             }
-            else result += arg;
-            return result;
+            else return element[0];
         }
 
         //string GetInput(string) - Gets a string from the user
