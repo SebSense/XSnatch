@@ -19,15 +19,15 @@ XSnatch.exe
 - **immediateParent** (Optional): Either left out or `a`. If set, narrows down the search to immediate children of the specified parentElement.
 
 ## Element Formatting
-The format for elements with attributes is: `element-attribute=value`. For instance:
+The format for elements with attributes is: `"element attribute=value"`. For instance:
 - `elem`: Matches any element named `elem`.
 - `*`: Matches any XML element.
-- `*-type=34`: Matches any element with an attribute named `type` having the value `34`.
-- `entry-id`: Matches an `<entry>` element with an `id` attribute of any value.
+- `"* type=34"`: Matches any element with an attribute named `type` having the value `34`.
+- `"entry id"`: Matches an `<entry>` element with an `id` attribute of any value.
 
 ## Example Usage
 ```
-XSnatch.exe sma_gentext.xml target *-id=42007
+XSnatch.exe sma_gentext.xml target "* id=42007"
 ```
 
 ## Error Handling

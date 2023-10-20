@@ -21,14 +21,14 @@
  *                              specified parentElement.
  * 
  * Element Formatting:
- * The format for elements with attributes is: "element-attribute=value". For instance:
- * - "elem": Matches any element named "elem".
- * - "*": Matches any XML element.
- * - "*-type=34": Matches any element with an attribute named "type" having the value "34".
- * - "entry-id": Matches an <entry> element with an "id" attribute of any value.
+ * The format for elements with attributes is: "element attribute=value". For instance:
+ * - 'elem': Matches any element named "elem".
+ * - '*': Matches any XML element.
+ * - '"* type=34"': Matches any element with an attribute named "type" having the value "34".
+ * - '"entry id"': Matches an <entry> element with an "id" attribute of any value.
  * 
  * Example Usage:
- * XSnatch.exe sma_gentext.xml target *-id=42007
+ * XSnatch.exe sma_gentext.xml target "* id=42007"
  * 
  * Error Handling:
  * - Checks for valid XML file input.
@@ -42,7 +42,6 @@
  * Author: Sebastian Senic
  * Date: 2023-10-18
  */
-
 using System.Xml;
 namespace XSnatch
 {
@@ -53,7 +52,6 @@ namespace XSnatch
             string xpath = "//"; //Stringbuilder for an XPATH address to be used for searching through the .xml file.
             string xpathDivider = "//"; //Sets the xpath divider chars between parentElement and targetElement to releative.
             string inputFile, outputFile = "output.txt";
-
             try
             {
                 switch (args.Length)
@@ -165,10 +163,10 @@ namespace XSnatch
         }
         //string ArgToXpath(string, char) - Takes a command-line argument and reformats it into a part of an XPATH element query
         //splitChar is the char used in the input string to separate name and attributes in the element.
-        private static string ArgToXpath(string arg, char splitChar = '-')
+        private static string ArgToXpath(string arg)
         {
             //split arg to array of [element name, attribute, attribute, attribute, ...]
-            string[] element = arg.Trim().Split(splitChar);
+            string[] element = arg.Trim().Split();
             string result = "";
             if (element.Length > 1)
             //if the element had attributes:
